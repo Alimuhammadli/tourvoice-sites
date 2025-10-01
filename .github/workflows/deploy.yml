@@ -1,0 +1,24 @@
+﻿name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "web/**"
+      - "admin/**"
+      - "company/**"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy (web+admin+company)
+        uses: w9jds/firebase-action@v13
+        with:
+          args: deploy --project tourvoice-prod-425f4 --only hosting:web,hosting:admin,hosting:company
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
