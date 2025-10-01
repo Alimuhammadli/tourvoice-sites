@@ -1,0 +1,14 @@
+﻿{
+  "projects": {
+    "default": "tourvoice-prod-425f4"
+  },
+  "targets": {
+    "tourvoice-prod-425f4": {
+      "hosting": {
+        "web":     [ "tourvoice-web-425f4a" ],
+        "admin":   [ "tourvoice-admin-425f4a" ],
+        "company": [ "tourvoice-company-425f4a" ]
+      }
+    }
+  }
+}
