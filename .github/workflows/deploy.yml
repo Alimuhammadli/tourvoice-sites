@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy (web+admin+company)
-        uses: w9jds/firebase-action@v13
+        uses: w9jds/firebase-action@v12
         with:
           args: deploy --project tourvoice-prod-425f4 --only hosting:web,hosting:admin,hosting:company
         env:
