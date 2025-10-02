@@ -1,1 +1,240 @@
+<!-- /company/sessions/index.html -->
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company • Sessions</title>
+  <link rel="icon" href="/web/favicon.ico" />
+  <style>
+    :root{color-scheme:dark light}
+    body{margin:0;font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#0b0f14; color:#e7ecf2}
+    .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#101823;border:1px solid #1e2a36;border-radius:999px;padding:8px 14px;font-size:14px}
+    .btn{background:#0d66ff;border:none;color:#fff;border-radius:8px;padding:10px 14px;font-weight:600;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .card{background:#0f1621;border:1px solid #1e2a36;border-radius:14px;padding:16px;margin:12px 0}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:12px}
+    @media(min-width:680px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .session{display:flex;flex-direction:column;gap:8px}
+    .meta{font-size:13px;color:#a7b3c2}
+    .row{display:flex;gap:8px;align-items:center}
+    input,select{background:#0b121b;border:1px solid #1e2a36;color:#e7ecf2;border-radius:8px;padding:10px}
+    .input-row{display:flex;gap:8px;flex-wrap:wrap}
+    .input-row>*{flex:1 1 180px}
+    a.link{color:#7db3ff;text-decoration:none}
+    .muted{color:#9aa8b8}
+    .hl{color:#e8f06a}
+    .empty{color:#93a3b5;padding:24px 8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="row" style="gap:12px">
+        <span id="emailPill" class="pill">..</span>
+        <span id="companyPill" class="pill">companyId: ..</span>
+        <span id="rolePill" class="pill">role: ..</span>
+      </div>
+      <div class="actions">
+        <button id="newBtn" class="btn">+ Yeni Session</button>
+        <button id="logoutBtn" class="pill" style="background:#172231;color:#e7ecf2">Çıkış</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h2 style="margin:0">Sessions</h2>
+        <div class="row">
+          <button id="prevBtn" class="pill" disabled>← Önceki</button>
+          <button id="nextBtn" class="pill" disabled>Sonraki →</button>
+        </div>
+      </div>
+      <div id="list" class="grid"></div>
+      <div id="empty" class="empty" style="display:none">Henüz kayıt yok.</div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Hızlı Oluştur</h3>
+      <div class="input-row">
+        <input id="codeInput" placeholder="Kod (örn. ACME-2410-01)" />
+        <select id="fromLang">
+          <option value="tr">Türkçe</option><option value="en">English</option><option value="ru">Русский</option>
+          <option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option>
+        </select>
+        <select id="targetLang">
+          <option value="en">English</option><option value="tr">Türkçe</option><option value="ru">Русский</option>
+          <option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option>
+        </select>
+        <button id="quickCreate" class="btn">Oluştur</button>
+      </div>
+      <div class="muted" style="margin-top:8px">
+        Kod boş bırakılırsa otomatik üretilecek: <span class="hl">ACME-10XYZ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+
+  <script>
+    // 1) BURAYI: Dashboard/Login sayfasında kullandığın firebaseConfig ile AYNEN doldur.
+    // (Aynı proje; public config. Eğer dosyada hazır bir init script'in varsa onunla da çalışır.)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "tourvoice-prod-425f4.firebaseapp.com",
+      projectId: "tourvoice-prod-425f4",
+      storageBucket: "tourvoice-prod-425f4.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID",
+    };
+
+    // 2) Firebase init
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    // UI elements
+    const emailPill   = document.getElementById('emailPill');
+    const companyPill = document.getElementById('companyPill');
+    const rolePill    = document.getElementById('rolePill');
+    const logoutBtn   = document.getElementById('logoutBtn');
+
+    const listEl  = document.getElementById('list');
+    const emptyEl = document.getElementById('empty');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    const newBtn       = document.getElementById('newBtn');
+    const quickCreate  = document.getElementById('quickCreate');
+    const codeInput    = document.getElementById('codeInput');
+    const fromLangSel  = document.getElementById('fromLang');
+    const targetLangSel= document.getElementById('targetLang');
+
+    // Pagination state
+    let companyId = null;
+    let pageSize  = 10;
+    let firstDoc  = null;
+    let lastDoc   = null;
+    let stacks    = []; // for back stack
+
+    logoutBtn.onclick = async () => { await auth.signOut(); location.href = '/company/login/'; };
+
+    // Helpers
+    function autoCode(prefix="ACME"){
+      const r = Math.random().toString(36).slice(2,7).toUpperCase();
+      const d = new Date(); const m = (d.getMonth()+1).toString().padStart(2,'0');
+      return `${prefix}-${d.getDate().toString().padStart(2,'0')}${m}${r}`;
+    }
+    function tsToLocal(ts){
+      if(!ts) return '-';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return new Intl.DateTimeFormat('tr-TR',{dateStyle:'medium', timeStyle:'short'}).format(d);
+    }
+    function render(items){
+      listEl.innerHTML = '';
+      if(!items.length){ emptyEl.style.display='block'; return; }
+      emptyEl.style.display='none';
+      for(const s of items){
+        const el = document.createElement('div');
+        el.className = 'card session';
+        el.innerHTML = `
+          <div class="row" style="justify-content:space-between">
+            <div><b>${s.code || '(kodsuz)'}</b></div>
+            <a class="link" href="/company/sessions/${encodeURIComponent(s.code || s.id)}/">Detay →</a>
+          </div>
+          <div class="meta">
+            <span>Başlangıç: ${tsToLocal(s.startedAt)}</span> •
+            <span>Kaynak: ${s.fromLang || '-'}</span> → <span>Hedef: ${s.targetLanguage || '-'}</span> •
+            <span>Segment sn: ${s.segmentSeconds ?? 0}</span>
+          </div>`;
+        listEl.appendChild(el);
+      }
+    }
+
+    async function loadPage(opts={}){
+      let q = db.collection('sessions')
+        .where('companyId','==',companyId)
+        .orderBy('startedAt','desc')
+        .limit(pageSize);
+
+      if(opts.startAfter) q = q.startAfter(opts.startAfter);
+      if(opts.endBefore)  q = q.endBefore(opts.endBefore);
+
+      const snap = await q.get();
+      const items = snap.docs.map(d=>({id:d.id, ...d.data()}));
+      render(items);
+
+      firstDoc = snap.docs[0] || null;
+      lastDoc  = snap.docs[snap.docs.length-1] || null;
+
+      prevBtn.disabled = stacks.length===0;
+      nextBtn.disabled = !lastDoc || snap.size < pageSize;
+    }
+
+    prevBtn.onclick = async ()=>{
+      if(!stacks.length) return;
+      const prev = stacks.pop();
+      await loadPage({ startAfter: prev.startAfter });
+    };
+    nextBtn.onclick = async ()=>{
+      if(!lastDoc) return;
+      stacks.push({ startAfter: lastDoc });
+      await loadPage({ startAfter: lastDoc });
+    };
+
+    async function createSession(given){
+      const code = (given?.code || '').trim() || autoCode((companyId||'ACME').toUpperCase());
+      const fromLang = given?.fromLang || 'tr';
+      const targetLanguage = given?.targetLanguage || 'en';
+
+      const ref = db.collection('sessions').doc(code);
+      await ref.set({
+        companyId, code,
+        fromLang, targetLanguage,
+        textBroadcast: true,
+        segmentSeconds: 0,
+        startedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      }, { merge:true });
+
+      // sayfayı yenileyelim
+      stacks = [];
+      await loadPage();
+      alert(`Session oluşturuldu: ${code}`);
+    }
+
+    newBtn.onclick = async ()=>{
+      const v = prompt('Kod gir (boş bırakırsan otomatik):');
+      await createSession({ code: v || '' });
+    };
+    quickCreate.onclick = async ()=>{
+      await createSession({
+        code: codeInput.value,
+        fromLang: fromLangSel.value,
+        targetLanguage: targetLangSel.value,
+      });
+      codeInput.value = '';
+    };
+
+    // Auth + claims
+    auth.onAuthStateChanged(async (user)=>{
+      if(!user){ location.href = '/company/login/'; return; }
+
+      emailPill.textContent = user.email || '(email yok)';
+      const tok = await user.getIdTokenResult(true);
+      const claims = tok?.claims || {};
+      companyId = claims.companyId || 'acme';
+      companyPill.textContent = `companyId: ${companyId}`;
+      rolePill.textContent = `role: ${claims.companyRole || 'company_admin'}`;
+
+      await loadPage();
+    });
+  </script>
+</body>
+</html>
 
