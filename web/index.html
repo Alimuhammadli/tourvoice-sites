@@ -7,7 +7,7 @@
   <meta name="description" content="Join early access; help shape TourVoice with your feedback." />
   <link rel="icon" href="favicon.svg" />
 
-  <!-- Open Graph / Twitter -->
+  <!-- Open Graph / Twitter (ilk yüklemede EN; botlar HTML'i statik okur) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="TourVoice — We’re redesigning the guide experience—together" />
   <meta property="og:description" content="Join early access; help shape TourVoice with your feedback." />
@@ -61,6 +61,11 @@
     .form button{padding:12px 16px;border:0;border-radius:8px;background:var(--brand);color:#0b1220;font-weight:700}
     .form small{color:var(--muted)}
 
+    /* LANG SWITCHER */
+    .lang{position:fixed;right:12px;bottom:12px;display:flex;gap:.5rem;z-index:20}
+    .pill{padding:.45rem .7rem;border-radius:.6rem;border:1px solid #263244;background:#0e1525;color:#e2e8f0;cursor:pointer}
+    .pill[aria-current="true"]{background:#1a2742}
+
     /* FOOTER */
     footer{border-top:1px solid rgba(148,163,184,.12);margin-top:48px}
     .foot{height:64px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px}
@@ -89,7 +94,7 @@
         <a href="https://company.tourvoice.app" rel="nofollow">Company</a>
       </nav>
 
-      <a class="cta" href="#updatesForm">Get updates</a>
+      <a class="cta" href="#updatesForm" id="cta">Get updates</a>
     </div>
   </header>
 
@@ -97,24 +102,22 @@
   <main class="max hero">
     <div class="hero__grid">
       <section>
-        <span class="eyebrow">COMING&nbsp;SOON</span>
-        <h1>We’re redesigning the guide experience—together</h1>
-        <p class="lead">
-          Join early access; help shape TourVoice with your feedback.
-        </p>
+        <span class="eyebrow" id="eyebrow">COMING&nbsp;SOON</span>
+        <h1 id="hl">We’re redesigning the guide experience—together</h1>
+        <p class="lead" id="sub">Join early access; help shape TourVoice with your feedback.</p>
 
         <!-- Early access / updates form -->
         <form id="updatesForm"
               action="https://formspree.io/f/xgvnykzo"
               method="POST"
               class="form">
-          <label for="email" style="display:block;width:100%">Get early access updates</label>
+          <label for="email" id="formLabel" style="display:block;width:100%">Get early access updates</label>
 
           <input type="email" id="email" name="email" placeholder="you@example.com" required>
 
           <label style="display:flex;align-items:center;gap:8px;width:100%">
             <input type="checkbox" name="consent" required>
-            <small>I agree to receive updates about TourVoice.</small>
+            <small id="consent">I agree to receive updates about TourVoice.</small>
           </label>
 
           <input type="hidden" name="_subject" value="TourVoice early-access signup">
@@ -125,16 +128,16 @@
           <!-- Honeypot -->
           <input type="text" name="_gotcha" style="display:none">
 
-          <button type="submit">Get updates</button>
+          <button type="submit" id="formBtn">Get updates</button>
           <span id="msg"></span>
         </form>
 
-        <p class="meta">Sürüm: pre-alpha · Entegre CI/CD: GitHub Actions → Firebase Hosting</p>
+        <p class="meta" id="meta">Version: pre-alpha · CI/CD: GitHub Actions → Firebase Hosting</p>
       </section>
 
       <aside class="hero__card">
         <img class="img" src="coming-soon.png" alt="TourVoice coming soon illustration">
-        <div class="meta">Artwork: temporary promo illustration</div>
+        <div class="meta" id="cap">Artwork: temporary promo illustration</div>
       </aside>
     </div>
   </main>
@@ -149,18 +152,105 @@
     </div>
   </footer>
 
+  <!-- Dil seçici -->
+  <div class="lang" aria-label="Language switcher">
+    <button class="pill" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="pill" id="btn-az" onclick="setLang('az')">AZ</button>
+    <button class="pill" id="btn-tr" onclick="setLang('tr')">TR</button>
+  </div>
+
   <script>
-    // Year
+    // Yıl
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Early-access form submit (AJAX)
+    // i18n sözlükleri
+    const i18n = {
+      en: {
+        eyebrow: "COMING SOON",
+        headline: "We’re redesigning the guide experience—together",
+        subtext: "Join early access; help shape TourVoice with your feedback.",
+        cta: "Get updates",
+        formLabel: "Get early access updates",
+        consent: "I agree to receive updates about TourVoice.",
+        formBtn: "Get updates",
+        meta: "Version: pre-alpha · CI/CD: GitHub Actions → Firebase Hosting",
+        imgCap: "Artwork: temporary promo illustration",
+        title: "TourVoice — We’re redesigning the guide experience—together",
+        desc: "Join early access; help shape TourVoice with your feedback."
+      },
+      az: {
+        eyebrow: "TEZLİKLƏ",
+        headline: "Bələdçi təcrübəsini birlikdə yenidən dizayn edirik",
+        subtext: "Erkən girişə qoşulun; rəyinizlə TourVoice-ı formalaşdırmağa kömək edin.",
+        cta: "Yenilikləri alın",
+        formLabel: "Erkən giriş yenilikləri üçün",
+        consent: "TourVoice haqqında yenilikləri almağa razıyam.",
+        formBtn: "Göndər",
+        meta: "Versiya: pre-alpha · CI/CD: GitHub Actions → Firebase Hosting",
+        imgCap: "Təsvir: müvəqqəti tanıtım illüstrasiyası",
+        title: "TourVoice — Bələdçi təcrübəsini birlikdə yenidən dizayn edirik",
+        desc: "Erkən girişə qoşulun; rəyinizlə TourVoice-ı formalaşdırmağa kömək edin."
+      },
+      tr: {
+        eyebrow: "ÇOK YAKINDA",
+        headline: "Rehber deneyimini birlikte yeniden tasarlıyoruz",
+        subtext: "Erken erişime katılın; geri bildiriminizle TourVoice’u birlikte şekillendirelim.",
+        cta: "Güncellemeleri al",
+        formLabel: "Erken erişim güncellemeleri için",
+        consent: "TourVoice ile ilgili güncellemeleri almayı kabul ediyorum.",
+        formBtn: "Gönder",
+        meta: "Sürüm: pre-alpha · CI/CD: GitHub Actions → Firebase Hosting",
+        imgCap: "Görsel: geçici tanıtım illüstrasyonu",
+        title: "TourVoice — Rehber deneyimini birlikte yeniden tasarlıyoruz",
+        desc: "Erken erişime katılın; geri bildiriminizle TourVoice’u birlikte şekillendirelim."
+      }
+    };
+
+    function q(s){ return document.querySelector(s); }
+
+    function setLang(lang){
+      const t = i18n[lang] || i18n.en;
+
+      // Metinler
+      q('#eyebrow').textContent = t.eyebrow;
+      q('#hl').textContent = t.headline;
+      q('#sub').textContent = t.subtext;
+      q('#cta').textContent = t.cta;
+      q('#formLabel').textContent = t.formLabel;
+      q('#consent').textContent = t.consent;
+      q('#formBtn').textContent = t.formBtn;
+      q('#meta').textContent = t.meta;
+      q('#cap').textContent = t.imgCap;
+
+      // <title> ve <meta name="description">
+      document.title = t.title;
+      let md = document.querySelector('meta[name="description"]');
+      if(!md){ md = document.createElement('meta'); md.setAttribute('name','description'); document.head.appendChild(md); }
+      md.setAttribute('content', t.desc);
+
+      // lang attribute + buton işaretleme
+      document.documentElement.lang = lang;
+      ['en','az','tr'].forEach(code => {
+        const btn = q('#btn-' + code);
+        if (btn) btn.setAttribute('aria-current', code === lang ? 'true' : 'false');
+      });
+
+      // kalıcı tercih + URL param
+      localStorage.setItem('lang', lang);
+      const url = new URL(location.href); url.searchParams.set('lang', lang); history.replaceState(null,'',url);
+    }
+
+    // Başlangıç dili: URL ?lang=… > localStorage > en
+    const initial = new URL(location.href).searchParams.get('lang') || localStorage.getItem('lang') || 'en';
+    setLang(initial);
+
+    // Formu AJAX ile gönder
     const f = document.getElementById('updatesForm');
     const msg = document.getElementById('msg');
-
     if (f) {
       f.addEventListener('submit', async (e) => {
         e.preventDefault();
-        msg.textContent = 'Sending…';
+        msg.textContent = (initial === 'az') ? 'Göndərilir…' : (initial === 'tr') ? 'Gönderiliyor…' : 'Sending…';
         try {
           const res = await fetch(f.action, {
             method: 'POST',
@@ -169,12 +259,18 @@
           });
           if (res.ok) {
             f.reset();
-            msg.textContent = 'Thanks! Check your inbox.';
+            msg.textContent = (initial === 'az') ? 'Təşəkkürlər! Poçtunuzu yoxlayın.' :
+                              (initial === 'tr') ? 'Teşekkürler! E-postanızı kontrol edin.' :
+                              'Thanks! Check your inbox.';
           } else {
-            msg.textContent = 'Oops, please try again.';
+            msg.textContent = (initial === 'az') ? 'Xəta baş verdi. Yenidən yoxlayın.' :
+                              (initial === 'tr') ? 'Bir şeyler ters gitti. Lütfen tekrar deneyin.' :
+                              'Oops, please try again.';
           }
         } catch {
-          msg.textContent = 'Network error, please try again.';
+          msg.textContent = (initial === 'az') ? 'Şəbəkə xətası. Yenidən cəhd edin.' :
+                            (initial === 'tr') ? 'Ağ hatası. Lütfen tekrar deneyin.' :
+                            'Network error, please try again.';
         }
       });
     }
