@@ -1,86 +1,55 @@
-﻿{
+{
   "hosting": [
     {
       "target": "web",
       "public": "web",
       "ignore": ["**/.*", "**/node_modules/**"],
       "headers": [
-        {
-          "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}",
-          "headers": [
-            { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-          ]
-        },
-        {
-          "source": "**/*.html",
-          "headers": [
-            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-          ]
-        },
-        {
-          "source": "**",
-          "headers": [
-            { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" },
-            { "key": "X-Content-Type-Options", "value": "nosniff" },
-            { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-            { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-            { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
-          ]
-        }
+        { "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+        { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+        { "source": "**", "headers": [
+          { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+        ]}
       ]
     },
 
+    /* ----------- ADMIN (SPA + dist) ----------- */
     {
       "target": "admin",
-      "public": "admin",
+      "public": "admin/dist",
       "ignore": ["**/.*", "**/node_modules/**"],
       "headers": [
-        {
-          "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}",
-          "headers": [
-            { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-          ]
-        },
-        {
-          "source": "**/*.html",
-          "headers": [
-            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-            { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
-          ]
-        },
-        {
-          "source": "**",
-          "headers": [
-            { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
-          ]
-        }
+        { "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+        { "source": "**/*.html", "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        ]},
+        { "source": "**", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+      ],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
       ]
     },
 
+    /* ----------- COMPANY (SPA + dist) ----------- */
     {
       "target": "company",
-      "public": "company",
+      "public": "company/dist",
       "ignore": ["**/.*", "**/node_modules/**"],
       "headers": [
-        {
-          "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}",
-          "headers": [
-            { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-          ]
-        },
-        {
-          "source": "**/*.html",
-          "headers": [
-            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-            { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
-          ]
-        },
-        {
-          "source": "**",
-          "headers": [
-            { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
-          ]
-        }
+        { "source": "**/*.{css,js,png,jpg,jpeg,svg,webp,woff2}", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+        { "source": "**/*.html", "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        ]},
+        { "source": "**", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+      ],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
       ]
     }
   ]
