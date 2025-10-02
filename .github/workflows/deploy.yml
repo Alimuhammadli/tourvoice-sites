@@ -16,14 +16,24 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
       - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+        run: npm i -g firebase-tools
 
+      # --- Build admin (Vite output: admin/dist) ---
+      - name: Build admin
+        working-directory: admin
+        run: npm ci && npm run build
+
+      # --- Build company (Vite output: company/dist) ---
+      - name: Build company
+        working-directory: company
+        run: npm ci && npm run build
+
+      # --- Deploy (web + admin + company) ---
       - name: Deploy to Firebase (web + admin + company)
         run: |
           firebase deploy --project tourvoice-prod-425f4 \
-            --only "hosting:web,hosting:admin,hosting:company"
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+            --only "hosting:web,hosting:admin,hosting:company" \
+            --token "${{ secrets.FIREBASE_TOKEN }}"
