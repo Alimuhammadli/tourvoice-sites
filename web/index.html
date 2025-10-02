@@ -76,7 +76,49 @@
     }
     .img{width:100%;height:auto;display:block;border-radius:12px}
     .meta{margin-top:8px;font-size:12px;color:var(--muted)}
-<!-- Early access / updates form -->
+
+    /* FOOTER */
+    footer{border-top:1px solid rgba(148,163,184,.12);margin-top:48px}
+    .foot{height:64px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero__grid{grid-template-columns:1fr;gap:22px}
+      h1{font-size:32px}
+      .links{display:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="max nav__row">
+      <div class="brand">
+        <span class="brand__dot" aria-hidden="true"></span>
+        <a href="/">TourVoice</a>
+      </div>
+
+      <nav class="links" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="https://admin.tourvoice.app" rel="nofollow">Admin</a>
+        <a href="https://company.tourvoice.app" rel="nofollow">Company</a>
+      </nav>
+
+      <a class="cta" href="mailto:hello@tourvoice.app?subject=TourVoice%20Updates">
+        Get updates
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="max hero">
+    <div class="hero__grid">
+      <section>
+        <span class="eyebrow">COMING&nbsp;SOON</span>
+        <h1>We’re redesigning the guide experience—together</h1>
+        <p class="lead">
+          <!-- Early access / updates form -->
 <form id="updatesForm"
       action="https://formspree.io/f/xgvnykzo"
       method="POST"
@@ -136,48 +178,6 @@
     }
   });
 </script>
-
-    /* FOOTER */
-    footer{border-top:1px solid rgba(148,163,184,.12);margin-top:48px}
-    .foot{height:64px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px}
-
-    /* Responsive */
-    @media (max-width:900px){
-      .hero__grid{grid-template-columns:1fr;gap:22px}
-      h1{font-size:32px}
-      .links{display:none}
-    }
-  </style>
-</head>
-<body>
-
-  <!-- NAV -->
-  <header class="nav">
-    <div class="max nav__row">
-      <div class="brand">
-        <span class="brand__dot" aria-hidden="true"></span>
-        <a href="/">TourVoice</a>
-      </div>
-
-      <nav class="links" aria-label="Primary">
-        <a href="/">Home</a>
-        <a href="https://admin.tourvoice.app" rel="nofollow">Admin</a>
-        <a href="https://company.tourvoice.app" rel="nofollow">Company</a>
-      </nav>
-
-      <a class="cta" href="mailto:hello@tourvoice.app?subject=TourVoice%20Updates">
-        Get updates
-      </a>
-    </div>
-  </header>
-
-  <!-- HERO -->
-  <main class="max hero">
-    <div class="hero__grid">
-      <section>
-        <span class="eyebrow">COMING&nbsp;SOON</span>
-        <h1>We’re redesigning the guide experience—together</h1>
-        <p class="lead">
           Join early access; help shape TourVoice with your feedback.
         </p>
         <p class="meta">Sürüm: pre-alpha · Entegre CI/CD: GitHub Actions → Firebase Hosting</p>
