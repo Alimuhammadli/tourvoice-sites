@@ -7,7 +7,7 @@
   <meta name="description" content="Join early access; help shape TourVoice with your feedback." />
   <link rel="icon" href="favicon.svg" />
 
-  <!-- Open Graph / Twitter (ilk yüklemede EN; botlar HTML'i statik okur) -->
+  <!-- Open Graph / Twitter (initially EN for bots) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="TourVoice — We’re redesigning the guide experience—together" />
   <meta property="og:description" content="Join early access; help shape TourVoice with your feedback." />
@@ -152,7 +152,7 @@
     </div>
   </footer>
 
-  <!-- Dil seçici -->
+  <!-- Language switcher -->
   <div class="lang" aria-label="Language switcher">
     <button class="pill" id="btn-en" onclick="setLang('en')">EN</button>
     <button class="pill" id="btn-az" onclick="setLang('az')">AZ</button>
@@ -160,10 +160,10 @@
   </div>
 
   <script>
-    // Yıl
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // i18n sözlükleri
+    // i18n dictionaries
     const i18n = {
       en: {
         eyebrow: "COMING SOON",
@@ -211,7 +211,7 @@
     function setLang(lang){
       const t = i18n[lang] || i18n.en;
 
-      // Metinler
+      // Texts
       q('#eyebrow').textContent = t.eyebrow;
       q('#hl').textContent = t.headline;
       q('#sub').textContent = t.subtext;
@@ -222,29 +222,29 @@
       q('#meta').textContent = t.meta;
       q('#cap').textContent = t.imgCap;
 
-      // <title> ve <meta name="description">
+      // <title> and <meta name="description">
       document.title = t.title;
       let md = document.querySelector('meta[name="description"]');
       if(!md){ md = document.createElement('meta'); md.setAttribute('name','description'); document.head.appendChild(md); }
       md.setAttribute('content', t.desc);
 
-      // lang attribute + buton işaretleme
+      // html lang + button state
       document.documentElement.lang = lang;
       ['en','az','tr'].forEach(code => {
         const btn = q('#btn-' + code);
         if (btn) btn.setAttribute('aria-current', code === lang ? 'true' : 'false');
       });
 
-      // kalıcı tercih + URL param
+      // persist + update URL
       localStorage.setItem('lang', lang);
       const url = new URL(location.href); url.searchParams.set('lang', lang); history.replaceState(null,'',url);
     }
 
-    // Başlangıç dili: URL ?lang=… > localStorage > en
+    // Initial language: ?lang=... > localStorage > en
     const initial = new URL(location.href).searchParams.get('lang') || localStorage.getItem('lang') || 'en';
     setLang(initial);
 
-    // Formu AJAX ile gönder
+    // Form AJAX submit
     const f = document.getElementById('updatesForm');
     const msg = document.getElementById('msg');
     if (f) {
