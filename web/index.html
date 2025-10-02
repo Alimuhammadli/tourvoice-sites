@@ -7,21 +7,18 @@
   <meta name="description" content="Join early access; help shape TourVoice with your feedback." />
   <link rel="icon" href="favicon.svg" />
 
-  <!-- Open Graph (paylaşım kartı) -->
-  <meta property="og:title" content="TourVoice — Coming Soon" />
-  <meta property="og:description" content="Akıllı tur rehberliği ve sesli deneyim. Çok yakında!" />
+  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website" />
+  <meta property="og:title" content="TourVoice — We’re redesigning the guide experience—together" />
+  <meta property="og:description" content="Join early access; help shape TourVoice with your feedback." />
   <meta property="og:url" content="https://www.tourvoice.app/" />
   <meta property="og:image" content="https://www.tourvoice.app/coming-soon.png" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#0f172a;
-      --muted:#94a3b8;
-      --text:#e2e8f0;
-      --brand:#22c55e;
-      --brand-ink:#052e1a;
+      --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0;
+      --brand:#22c55e; --brand-ink:#052e1a;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -30,52 +27,39 @@
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:linear-gradient(180deg,#0a0f1e 0%,#0f1a31 100%);
       color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit;text-decoration:none}
     .max{max-width:1040px;margin:0 auto;padding:0 20px}
 
     /* NAV */
-    .nav{
-      position:sticky;top:0;z-index:5;
-      background:rgba(10,15,30,.75);
-      backdrop-filter:saturate(140%) blur(10px);
-      border-bottom:1px solid rgba(148,163,184,.12);
-    }
-    .nav__row{
-      display:flex;align-items:center;justify-content:space-between;
-      height:64px;
-    }
+    .nav{position:sticky;top:0;z-index:5;background:rgba(10,15,30,.75);
+      backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid rgba(148,163,184,.12)}
+    .nav__row{display:flex;align-items:center;justify-content:space-between;height:64px}
     .brand{display:flex;gap:10px;align-items:center;font-weight:700;letter-spacing:.2px}
     .brand__dot{width:10px;height:10px;border-radius:50%;background:var(--brand);box-shadow:0 0 24px var(--brand)}
     .links{display:flex;gap:18px;font-weight:500;color:var(--muted)}
-    .cta{
-      display:inline-flex;align-items:center;gap:8px;
-      background:var(--brand);color:#07130b;border:0;
-      padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;
-      box-shadow:0 10px 24px rgba(34,197,94,.25);
-    }
-    .cta:hover{transform:translateY(-1px)}
-    .cta:active{transform:translateY(0)}
+    .cta{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:#07130b;border:0;
+      padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(34,197,94,.25)}
+    .cta:hover{transform:translateY(-1px)} .cta:active{transform:translateY(0)}
 
     /* HERO */
     .hero{padding:56px 0 48px}
     .hero__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
-    .eyebrow{
-      display:inline-block;background:rgba(34,197,94,.15);color:#c7f7d9;
-      border:1px solid rgba(34,197,94,.35);
-      padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.3px;
-    }
+    .eyebrow{display:inline-block;background:rgba(34,197,94,.15);color:#c7f7d9;border:1px solid rgba(34,197,94,.35);
+      padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.3px}
     h1{margin:16px 0 12px;font-size:40px;line-height:1.15}
     p.lead{margin:0 0 18px;color:var(--muted);font-size:18px}
-    .hero__card{
-      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-      border:1px solid rgba(148,163,184,.18);
-      border-radius:16px;padding:14px;
-    }
+    .hero__card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+      border:1px solid rgba(148,163,184,.18);border-radius:16px;padding:14px}
     .img{width:100%;height:auto;display:block;border-radius:12px}
     .meta{margin-top:8px;font-size:12px;color:var(--muted)}
+
+    /* FORM */
+    .form{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .form input[type=email]{padding:12px 14px;border-radius:8px;border:1px solid #334155;min-width:260px;background:#0b1220;color:#e2e8f0}
+    .form button{padding:12px 16px;border:0;border-radius:8px;background:var(--brand);color:#0b1220;font-weight:700}
+    .form small{color:var(--muted)}
 
     /* FOOTER */
     footer{border-top:1px solid rgba(148,163,184,.12);margin-top:48px}
@@ -105,9 +89,7 @@
         <a href="https://company.tourvoice.app" rel="nofollow">Company</a>
       </nav>
 
-      <a class="cta" href="mailto:hello@tourvoice.app?subject=TourVoice%20Updates">
-        Get updates
-      </a>
+      <a class="cta" href="#updatesForm">Get updates</a>
     </div>
   </header>
 
@@ -118,74 +100,41 @@
         <span class="eyebrow">COMING&nbsp;SOON</span>
         <h1>We’re redesigning the guide experience—together</h1>
         <p class="lead">
-          <!-- Early access / updates form -->
-<form id="updatesForm"
-      action="https://formspree.io/f/xgvnykzo"
-      method="POST"
-      class="form">
-  <label for="email" style="display:block;margin-bottom:8px;">
-    Get early access updates
-  </label>
-
-  <input type="email" id="email" name="email"
-         placeholder="you@example.com" required
-         style="padding:12px;border-radius:8px;border:1px solid #334155;min-width:260px;">
-
-  <!-- (İsteğe bağlı) KVKK/GDPR onayı -->
-  <label style="display:block;margin:8px 0 12px;">
-    <input type="checkbox" name="consent" required>
-    I agree to receive updates about TourVoice.
-  </label>
-
-  <!-- Başlık / etiketler -->
-  <input type="hidden" name="_subject"  value="TourVoice early-access signup">
-  <input type="hidden" name="source"    value="landing-web">
-  <!-- (isteğe bağlı) başarı sayfasına yönlendirme -->
-  <!-- <input type="hidden" name="_redirect" value="https://www.tourvoice.app/?thanks=1"> -->
-
-  <!-- Basit honeypot -->
-  <input type="text" name="_gotcha" style="display:none">
-
-  <button type="submit"
-          style="padding:12px 16px;border:0;border-radius:8px;background:#22c55e;color:#0b1220;font-weight:600;">
-    Get updates
-  </button>
-
-  <span id="msg" style="margin-left:12px;"></span>
-</form>
-
-<script>
-  // Sayfadan ayrılmadan gönderim (daha iyi UX)
-  const f = document.getElementById('updatesForm');
-  const msg = document.getElementById('msg');
-  f.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.textContent = 'Sending…';
-    try {
-      const res = await fetch(f.action, {
-        method: 'POST',
-        body: new FormData(f),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        f.reset();
-        msg.textContent = 'Thanks! Check your inbox.';
-      } else {
-        msg.textContent = 'Oops, please try again.';
-      }
-    } catch {
-      msg.textContent = 'Network error, please try again.';
-    }
-  });
-</script>
           Join early access; help shape TourVoice with your feedback.
         </p>
+
+        <!-- Early access / updates form -->
+        <form id="updatesForm"
+              action="https://formspree.io/f/xgvnykzo"
+              method="POST"
+              class="form">
+          <label for="email" style="display:block;width:100%">Get early access updates</label>
+
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+          <label style="display:flex;align-items:center;gap:8px;width:100%">
+            <input type="checkbox" name="consent" required>
+            <small>I agree to receive updates about TourVoice.</small>
+          </label>
+
+          <input type="hidden" name="_subject" value="TourVoice early-access signup">
+          <input type="hidden" name="source"  value="landing-web">
+          <!-- Success redirect (optional)
+          <input type="hidden" name="_redirect" value="https://www.tourvoice.app/?thanks=1"> -->
+
+          <!-- Honeypot -->
+          <input type="text" name="_gotcha" style="display:none">
+
+          <button type="submit">Get updates</button>
+          <span id="msg"></span>
+        </form>
+
         <p class="meta">Sürüm: pre-alpha · Entegre CI/CD: GitHub Actions → Firebase Hosting</p>
       </section>
 
       <aside class="hero__card">
-        <img class="img" src="coming-soon.png" alt="TourVoice coming soon görseli">
-        <div class="meta">Görsel: geçici tanıtım illüstrasyonu</div>
+        <img class="img" src="coming-soon.png" alt="TourVoice coming soon illustration">
+        <div class="meta">Artwork: temporary promo illustration</div>
       </aside>
     </div>
   </main>
@@ -201,8 +150,34 @@
   </footer>
 
   <script>
-    // Yılı otomatik doldur
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Early-access form submit (AJAX)
+    const f = document.getElementById('updatesForm');
+    const msg = document.getElementById('msg');
+
+    if (f) {
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = 'Sending…';
+        try {
+          const res = await fetch(f.action, {
+            method: 'POST',
+            body: new FormData(f),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            f.reset();
+            msg.textContent = 'Thanks! Check your inbox.';
+          } else {
+            msg.textContent = 'Oops, please try again.';
+          }
+        } catch {
+          msg.textContent = 'Network error, please try again.';
+        }
+      });
+    }
   </script>
 </body>
 </html>
