@@ -16,6 +16,7 @@
         ] }
       ]
     },
+
     {
       "target": "admin",
       "public": "admin",
@@ -28,8 +29,14 @@
         ] },
         { "source": "**", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
       ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+      "redirects": [
+        { "source": "/login", "destination": "/", "type": 301 }
+      ],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
     },
+
     {
       "target": "company",
       "public": "company",
@@ -42,7 +49,12 @@
         ] },
         { "source": "**", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
       ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+      "redirects": [
+        { "source": "/login", "destination": "/", "type": 301 }
+      ],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
     }
   ]
 }
