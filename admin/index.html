@@ -63,13 +63,12 @@
     const app  = firebase.app();
     const auth = firebase.auth();
 
-    // Bilgi amaçlı: hangi anahtar ile init olduğunu göster (günlükte görünsün)
+    // Bilgi amaçlı: hangi anahtar ile init olduğunu göster
     (function showInfo(){
       try {
         const apiKey = app.options?.apiKey || "(yok)";
         document.getElementById('info').textContent =
           `Bağlantı hazır • API key (auto-init): ${apiKey.slice(0,6)}•••`;
-        // console.log('Firebase options:', app.options); // isterseniz açın
       } catch(_){}
     })();
 
@@ -88,13 +87,12 @@
         const tok = await user.getIdTokenResult(true);
         if (tok?.claims?.superadmin === true) {
           // Başarılı: admin paneline yönlendir
-          location.href = '/admin/'; // dilediğiniz rota
+          location.href = '/admin/'; 
         } else {
           await auth.signOut();
           setErr('Bu hesap için superadmin yetkisi bulunmuyor.');
         }
       } catch (e) {
-        // En sık görülen: api key / domain / kullanıcı hataları
         setErr(`Giriş hatası: ${e.message || e.code || e}`);
       } finally {
         busy(false);
