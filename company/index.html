@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Company Girişi • TourVoice</title>
+  <title>Firma Girişi • TourVoice</title>
   <link rel="icon" href="/company/favicon.svg" />
   <style>
     :root{color-scheme:dark light}
@@ -39,17 +39,13 @@
 </head>
 <body>
   <main class="card">
-    <h1>Company Girişi</h1>
-    <p class="muted">
-      Bu panele girebilmek için kullanıcıda
-      <code class="pill">companyId</code> ve
-      <code class="pill">companyRole</code> claim’leri olmalıdır.
-    </p>
+    <h1>Firma Girişi</h1>
+    <p class="muted">Sadece <code class="pill">company_admin: true</code> yetkisi olan kullanıcılar giriş yapabilir.</p>
 
     <div id="err" class="error"></div>
 
     <div class="row">
-      <input id="email" type="email" autocomplete="username" placeholder="E-posta (örn. ops@acme.com)" />
+      <input id="email" type="email" autocomplete="username" placeholder="E-posta (örn. rehber@firma.com)" />
       <input id="pass" type="password" autocomplete="current-password" placeholder="Şifre" />
       <button id="loginBtn">Giriş yap</button>
     </div>
@@ -57,17 +53,15 @@
     <div class="help" id="info"></div>
   </main>
 
-  <!-- Firebase SDK’leri (Hosting auto-init ▶ config sızdırmaz) -->
+  <!-- Firebase SDK’leri -->
   <script src="/__/firebase/10.12.4/firebase-app-compat.js"></script>
   <script src="/__/firebase/10.12.4/firebase-auth-compat.js"></script>
   <script src="/__/firebase/init.js"></script>
 
   <script>
-    // ---- Firebase ----
     const app  = firebase.app();
     const auth = firebase.auth();
 
-    // Bilgi: hangi anahtar ile init edildiğini kısmi göster
     (function showInfo(){
       try {
         const apiKey = app.options?.apiKey || "(yok)";
@@ -89,13 +83,11 @@
         await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const { user } = await auth.signInWithEmailAndPassword(email, pass);
         const tok = await user.getIdTokenResult(true);
-        const claims = tok?.claims || {};
-        if (claims.companyId && claims.companyRole) {
-          // Başarılı: company paneline yönlendir
-          location.href = '/company/'; // dilediğiniz rota
+        if (tok?.claims?.company_admin === true) {
+          location.href = '/company/';
         } else {
           await auth.signOut();
-          setErr('Bu hesap için gerekli claim’ler bulunmuyor (companyId / companyRole).');
+          setErr('Bu hesap için company_admin yetkisi bulunmuyor.');
         }
       } catch (e) {
         setErr(`Giriş hatası: ${e.message || e.code || e}`);
@@ -104,13 +96,11 @@
       }
     };
 
-    // Oturum açıksa claim kontrolü yapıp içeri al
     auth.onAuthStateChanged(async (user) => {
       if (!user) return;
       try {
         const tok = await user.getIdTokenResult(true);
-        const claims = tok?.claims || {};
-        if (claims.companyId && claims.companyRole) location.href = '/company/';
+        if (tok?.claims?.company_admin === true) location.href = '/company/';
       } catch(_) {}
     });
   </script>
