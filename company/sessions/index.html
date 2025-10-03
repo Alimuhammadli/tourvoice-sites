@@ -5,7 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Company • Sessions</title>
-  <link rel="icon" href="/web/favicon.ico" />
+  <!-- İstersen favicon’u company/ içine koyup adını buna göre ayarla -->
+  <link rel="icon" href="/favicon.svg" />
   <style>
     :root{color-scheme:dark light}
     body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#0b0f14;color:#e7ecf2}
@@ -117,19 +118,19 @@
   <script src="/__/firebase/init.js"></script>
 
   <script>
-    /* ==================== Firebase ==================== */
+    /* =============== Firebase =============== */
     const app  = firebase.app();
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    /* ==================== Router ==================== */
+    /* =============== Router =============== */
     // /company/sessions/            -> liste
     // /company/sessions/{code}/     -> detay
-    const path = location.pathname.replace(/\/+$/, ''); // trailing slash temizle
+    const path  = location.pathname.replace(/\/+$/, '');
     const parts = path.split('/');
     const maybeCode = parts.length >= 4 ? decodeURIComponent(parts[3]) : null;
 
-    /* ==================== UI Elemanları ==================== */
+    /* =============== UI =============== */
     const emailPill    = document.getElementById('emailPill');
     const companyPill  = document.getElementById('companyPill');
     const rolePill     = document.getElementById('rolePill');
@@ -157,7 +158,7 @@
     const saveBtn      = document.getElementById('saveBtn');
     const delBtn       = document.getElementById('delBtn');
 
-    /* ==================== State ==================== */
+    /* =============== State & Helpers =============== */
     let companyId = null;
     const pageSize = 10;
     let lastDoc = null;
@@ -165,7 +166,6 @@
 
     logoutBtn.onclick = async () => { await auth.signOut(); location.href = '/company/login/'; };
 
-    /* ==================== Helpers ==================== */
     const autoCode = (prefix="ACME") => {
       const r = Math.random().toString(36).slice(2,7).toUpperCase();
       const d = new Date(); const m = (d.getMonth()+1).toString().padStart(2,'0');
@@ -197,7 +197,7 @@
       }
     };
 
-    /* ==================== Listeleme & Sayfalama ==================== */
+    /* =============== Listeleme & Sayfalama =============== */
     async function loadPage(opts={}) {
       let q = db.collection('sessions')
         .where('companyId','==',companyId)
@@ -226,7 +226,7 @@
       await loadPage({ startAfter: lastDoc });
     };
 
-    /* ==================== Oluşturma ==================== */
+    /* =============== Oluşturma =============== */
     async function createSession(given) {
       const code = (given?.code || '').trim() || autoCode((companyId||'ACME').toUpperCase());
       const fromLang = given?.fromLang || 'tr';
@@ -260,9 +260,8 @@
       codeInput.value = '';
     };
 
-    /* ==================== Detay ==================== */
+    /* =============== Detay =============== */
     async function openDetail(code) {
-      // Liste kartını gizleyip detay kartını göster
       listCard.style.display = 'none';
       detailCard.style.display = 'block';
 
@@ -311,7 +310,7 @@
       };
     }
 
-    /* ==================== Auth & Claims ==================== */
+    /* =============== Auth & Claims =============== */
     auth.onAuthStateChanged(async (user) => {
       if (!user) { location.href = '/company/login/'; return; }
 
@@ -322,10 +321,7 @@
       companyPill.textContent = `companyId: ${companyId}`;
       rolePill.textContent    = `role: ${claims.companyRole || 'company_admin'}`;
 
-      // Listeyi yükle
       await loadPage();
-
-      // /company/sessions/{code}/ ise detay aç
       if (maybeCode) { await openDetail(maybeCode); }
     });
   </script>
