@@ -1,0 +1,29 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Dashboard</title>
+
+<h1>Dashboard ✅</h1>
+<p id="hi"></p>
+<p><a href="#" id="logout">Çıkış yap</a></p>
+
+<script src="/__/firebase/10.12.4/firebase-app-compat.js"></script>
+<script src="/__/firebase/10.12.4/firebase-auth-compat.js"></script>
+<script src="/__/firebase/init.js"></script>
+<script>
+const auth = firebase.auth();
+document.getElementById('logout').onclick = async (e) => {
+  e.preventDefault(); await auth.signOut(); location.replace('/login.html');
+};
+
+auth.onAuthStateChanged(async (u) => {
+  if (!u) return location.replace('/login.html');
+  const t = await u.getIdTokenResult(true);
+  if (t.claims?.superadmin === true) {
+    document.getElementById('hi').textContent = 'Hoş geldin: ' + (u.email || u.uid);
+  } else {
+    await auth.signOut(); location.replace('/login.html');
+  }
+});
+</script>
