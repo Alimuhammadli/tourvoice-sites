@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Girişi</title>
+
+<h1>Admin Girişi</h1>
+<div id="err" style="color:#c00;margin:.5rem 0"></div>
+<input id="email" type="email" placeholder="admin@tourvoice.app"><br>
+<input id="pass"  type="password" placeholder="Şifre"><br>
+<button id="btn">Giriş yap</button>
+
+<!-- Firebase (Hosting auto-init: config sızdırmaz) -->
+<script src="/__/firebase/10.12.4/firebase-app-compat.js"></script>
+<script src="/__/firebase/10.12.4/firebase-auth-compat.js"></script>
+<script src="/__/firebase/init.js"></script>
+
+<script>
+const auth = firebase.auth();
+const $ = id => document.getElementById(id);
+const err = m => $('err').textContent = m || '';
+
+$('btn').onclick = async () => {
+  err();
+  try {
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    const { user } =
+      await auth.signInWithEmailAndPassword($('email').value.trim(), $('pass').value);
+    const tok = await user.getIdTokenResult(true);
+    if (tok.claims?.superadmin === true) {
+      location.replace('/dashboard.html');
+    } else {
+      await auth.signOut(); err('Bu hesapta superadmin yetkisi yok.');
+    }
+  } catch (e) {
+    err(e?.message || String(e));
+  }
+};
+
+// Zaten girişliyse direk dashboard
+auth.onAuthStateChanged(async (u) => {
+  if (!u) return;
+  const t = await u.getIdTokenResult(true);
+  if (t.claims?.superadmin === true) location.replace('/dashboard.html');
+});
+</script>
